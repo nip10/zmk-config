@@ -1,0 +1,8 @@
+---
+# Change "nice_nano_v2" to match your microcontroller.
+# Common options: nice_nano_v2, nice_nano, seeeduino_xiao_ble
+include:
+  - board: nice_nano_v2
+    shield: lily58_left
+  - board: nice_nano_v2
+    shield: lily58_right
