@@ -3,26 +3,19 @@
  *
  * macOS setup: System Settings > Keyboard > Input Sources > add "Portuguese"
  *
- * HID keycodes are position-based (US layout), but macOS Portuguese layout
- * interprets them as Portuguese characters. Comments show what each key
- * actually produces.
+ * Home row mods: hold S/D/F or J/K/L for Ctrl/Alt/Cmd
  *
- * Dead keys on base layer (right column):
- *   RBKT  = ´ dead key  → then vowel: á é í ó ú   (Shift: ` → à)
- *   BSLH  = ~ dead key  → then vowel: ã õ          (Shift: ^ → â ê ô)
- *   SEMI  = ç            (Shift: Ç)
- *
- * Accent workflow:
- *   1. Tap ´ (right of P)
- *   2. Tap a vowel (a, e, i, o, u)
- *   3. Get the accented character (á, é, í, ó, ú)
- *   Same for ~→ã/õ, Shift+´→à, Shift+~→â/ê/ô
+ * Accents (on LOWER layer, right column):
+ *   Hold LOWER, tap ´ (right of =), release LOWER, tap vowel → á é í ó ú
+ *   Hold LOWER, tap ~ (right of }), release LOWER, tap vowel → ã õ
+ *   Add Shift to dead key: Shift+´ = ` → à    Shift+~ = ^ → â ê ô
  */
 
 #include <behaviors.dtsi>
-#include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/ext_power.h>
+#include <dt-bindings/zmk/keys.h>
+#include "keys_pt.h"
 
 #define DEFAULT 0
 #define LOWER   1
@@ -36,89 +29,78 @@
             // ┌─────┬─────┬─────┬─────┬─────┬─────┐                    ┌─────┬─────┬─────┬─────┬─────┬─────┐
             // │ ESC │  1  │  2  │  3  │  4  │  5  │                    │  6  │  7  │  8  │  9  │  0  │BKSP │
             // ├─────┼─────┼─────┼─────┼─────┼─────┤                    ├─────┼─────┼─────┼─────┼─────┼─────┤
-            // │ TAB │  Q  │  W  │  E  │  R  │  T  │                    │  Y  │  U  │  I  │  O  │  P  │  ´~ │
+            // │ TAB │  Q  │  W  │  E  │  R  │  T  │                    │  Y  │  U  │  I  │  O  │  P  │ DEL │
             // ├─────┼─────┼─────┼─────┼─────┼─────┤                    ├─────┼─────┼─────┼─────┼─────┼─────┤
-            // │CTRL │  A  │  S  │  D  │  F  │  G  │                    │  H  │  J  │  K  │  L  │  Ç  │  ~^ │
+            // │CTRL │  A  │  S  │  D  │  F  │  G  │                    │  H  │  J  │  K  │  L  │  Ç  │ '/? │
+            // │     │     │ ctrl│ alt │ cmd │     │                    │     │ ctrl│ alt │ cmd │     │     │
             // ├─────┼─────┼─────┼─────┼─────┼─────┼──────┐    ┌───────┼─────┼─────┼─────┼─────┼─────┼─────┤
-            // │SHIFT│  Z  │  X  │  C  │  V  │  B  │ +/*  │    │  º/ª  │  N  │  M  │  ,  │  .  │  -  │SHIFT│
+            // │SHIFT│  Z  │  X  │  C  │  V  │  B  │  +   │    │   º   │  N  │  M  │  ,  │  .  │  -  │SHIFT│
             // └─────┴─────┴─────┼─────┼─────┼─────┼──────┤    ├───────┼─────┼─────┼─────┼─────┴─────┴─────┘
             //                   │ OPT │ CMD │LOWER│SPACE │    │ ENTER │RAISE│BKSP │ CMD │
             //                   └─────┴─────┴─────┴──────┘    └───────┴─────┴─────┴─────┘
-            //
-            // Key:  ´~ means ´ (acute dead key), Shift gives ` (grave dead key)
-            //       ~^ means ~ (tilde dead key), Shift gives ^ (circumflex dead key)
-            //       +/* means + (plus), Shift gives * (asterisk)
-            //       º/ª means º (masc ordinal), Shift gives ª (fem ordinal)
 
             bindings = <
-                &kp ESC   &kp N1 &kp N2 &kp N3   &kp N4   &kp N5                        &kp N6 &kp N7 &kp N8    &kp N9  &kp N0   &kp BSPC
-                &kp TAB   &kp Q  &kp W  &kp E    &kp R    &kp T                         &kp Y  &kp U  &kp I     &kp O   &kp P    &kp RBKT
-                &kp LCTRL &kp A  &kp S  &kp D    &kp F    &kp G                         &kp H  &kp J  &kp K     &kp L   &kp SEMI &kp BSLH
-                &kp LSHFT &kp Z  &kp X  &kp C    &kp V    &kp B    &kp LBKT   &kp SQT   &kp N  &kp M  &kp COMMA &kp DOT &kp FSLH &kp RSHFT
-                                        &kp LALT &kp LGUI &mo LOWER &kp SPACE &kp RET   &mo RAISE &kp BSPC &kp RGUI
+&kp ESC   &kp N1  &kp N2            &kp N3          &kp N4            &kp N5                              &kp N6  &kp N7             &kp N8           &kp N9             &kp N0            &kp BSPC
+&kp TAB   &kp Q   &kp W             &kp E           &kp R             &kp T                               &kp Y   &kp U              &kp I            &kp O              &kp P             &kp DEL
+&kp LCTRL &kp A   &mt LEFT_CONTROL S &mt LEFT_ALT D &mt LEFT_COMMAND F &kp G                              &kp H   &mt RIGHT_CONTROL J &mt RIGHT_ALT K &mt RIGHT_COMMAND L &kp PT_C_CEDILLA &kp PT_SQT
+&kp LSHFT &kp Z   &kp X             &kp C           &kp V             &kp B   &kp PT_PLUS  &kp PT_ORDM   &kp N   &kp M              &kp COMMA        &kp DOT            &kp PT_MINUS      &kp RSHFT
+                                     &kp LALT        &kp LGUI          &mo LOWER &kp SPACE  &kp RET       &mo RAISE &kp BSPC         &kp RGUI
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
 
         lower_layer {
-            // Symbols + F-keys + Bluetooth
+            // Symbols + Dead keys + F-keys + Bluetooth
             //
             // ┌─────┬─────┬─────┬─────┬─────┬─────┐                    ┌─────┬─────┬─────┬─────┬─────┬─────┐
             // │ F12 │ F1  │ F2  │ F3  │ F4  │ F5  │                    │ F6  │ F7  │ F8  │ F9  │ F10 │ F11 │
             // ├─────┼─────┼─────┼─────┼─────┼─────┤                    ├─────┼─────┼─────┼─────┼─────┼─────┤
-            // │     │  !  │  "  │  #  │  $  │  %  │                    │  &  │  /  │  (  │  )  │  =  │ DEL │
+            // │     │  !  │  "  │  #  │  $  │  %  │                    │  &  │  /  │  (  │  )  │  =  │  ´  │
             // ├─────┼─────┼─────┼─────┼─────┼─────┤                    ├─────┼─────┼─────┼─────┼─────┼─────┤
-            // │     │  «  │  »  │  €  │  '  │  ?  │                    │  @  │  [  │  ]  │  {  │  }  │  \  │
+            // │     │  «  │  »  │  €  │  '  │  ?  │                    │  @  │  [  │  ]  │  {  │  }  │  ~  │
             // ├─────┼─────┼─────┼─────┼─────┼─────┼──────┐    ┌───────┼─────┼─────┼─────┼─────┼─────┼─────┤
-            // │     │BTCLR│ BT0 │ BT1 │ BT2 │ BT3 │      │    │       │  |  │  ;  │  :  │  _  │  *  │     │
+            // │     │BTCLR│ BT0 │ BT1 │ BT2 │ BT3 │      │    │       │  |  │  \  │  ;  │  :  │  _  │  *  │
             // └─────┴─────┴─────┼─────┼─────┼─────┼──────┤    ├───────┼─────┼─────┼─────┼─────┴─────┴─────┘
             //                   │     │     │     │      │    │       │     │ DEL │     │
             //                   └─────┴─────┴─────┴──────┘    └───────┴─────┴─────┴─────┘
             //
-            // Notes on PT layout HID mappings:
-            //   Shift+2 = "    Shift+6 = &    Shift+7 = /
-            //   Shift+0 = =    EQUAL pos = «   Shift+EQUAL = »
-            //   MINUS pos = '  Shift+MINUS = ?
-            //   Shift+COMMA = ;  Shift+DOT = :
-            //   Shift+FSLH = _   Shift+LBKT = *
-            //   GRAVE pos = \    Shift+GRAVE = |
-            //   Option+N2 = @  Option+N8 = [  Option+N9 = ]
-            //   Option+Shift+N8 = {  Option+Shift+N9 = }
-            //   Option+E = €
+            // Dead keys (right column):
+            //   ´ = acute dead key     (Shift: ` grave)     → then vowel: á/à
+            //   ~ = tilde dead key     (Shift: ^ circumflex) → then vowel: ã/â
 
             bindings = <
-                &kp F12   &kp F1       &kp F2       &kp F3       &kp F4       &kp F5                          &kp F6       &kp F7       &kp F8          &kp F9          &kp F10      &kp F11
-                &trans    &kp LS(N1)   &kp LS(N2)   &kp LS(N3)   &kp LS(N4)   &kp LS(N5)                      &kp LS(N6)   &kp LS(N7)   &kp LS(N8)      &kp LS(N9)      &kp LS(N0)   &kp DEL
-                &trans    &kp EQUAL    &kp LS(EQUAL) &kp RA(E)   &kp MINUS    &kp LS(MINUS)                    &kp RA(N2)   &kp RA(N8)   &kp RA(N9)      &kp RA(LS(N8))  &kp RA(LS(N9)) &kp GRAVE
-                &trans    &bt BT_CLR   &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3  &trans   &trans   &kp LS(GRAVE) &kp LS(COMMA) &kp LS(DOT)  &kp LS(FSLH)    &kp LS(LBKT) &trans
-                                                    &trans       &trans       &trans         &trans   &trans   &trans       &kp DEL      &trans
+&kp F12   &kp F1       &kp F2       &kp F3       &kp F4       &kp F5                          &kp F6       &kp F7       &kp F8       &kp F9       &kp F10      &kp F11
+&trans    &kp PT_EXCL  &kp PT_DQT   &kp PT_HASH  &kp PT_DLLR  &kp PT_PRCNT                    &kp PT_AMPS  &kp PT_FSLH  &kp PT_LPAR  &kp PT_RPAR  &kp PT_EQUAL &kp PT_ACUTE
+&trans    &kp PT_LAQUO &kp PT_RAQUO &kp PT_EURO  &kp PT_SQT   &kp PT_QMARK                    &kp PT_AT    &kp PT_LBKT  &kp PT_RBKT  &kp PT_LBRC  &kp PT_RBRC  &kp PT_TILDE
+&trans    &bt BT_CLR   &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3  &trans   &trans  &kp PT_PIPE  &kp PT_BSLH  &kp PT_SEMI  &kp PT_COLON &kp PT_UNDER &kp PT_STAR
+                                     &trans       &trans        &trans        &trans   &trans  &trans       &kp DEL      &trans
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
 
         raise_layer {
-            // Navigation + Numbers
+            // Navigation + Numbers + F-keys
             //
             // ┌─────┬─────┬─────┬─────┬─────┬─────┐                    ┌─────┬─────┬─────┬─────┬─────┬─────┐
             // │     │     │     │     │     │     │                    │     │     │     │     │     │     │
             // ├─────┼─────┼─────┼─────┼─────┼─────┤                    ├─────┼─────┼─────┼─────┼─────┼─────┤
             // │     │  1  │  2  │  3  │  4  │  5  │                    │  6  │  7  │  8  │  9  │  0  │     │
             // ├─────┼─────┼─────┼─────┼─────┼─────┤                    ├─────┼─────┼─────┼─────┼─────┼─────┤
-            // │     │     │     │     │     │     │                    │  ←  │  ↓  │  ↑  │  →  │     │     │
+            // │     │ F1  │ F2  │ F3  │ F4  │ F5  │                    │  ←  │  ↓  │  ↑  │  →  │ F6  │     │
             // ├─────┼─────┼─────┼─────┼─────┼─────┼──────┐    ┌───────┼─────┼─────┼─────┼─────┼─────┼─────┤
-            // │     │     │     │     │     │     │      │    │       │HOME │PG_DN│PG_UP│ END │     │     │
+            // │     │ F7  │ F8  │ F9  │ F10 │ F11 │      │    │       │HOME │PG_DN│PG_UP│ END │ F12 │     │
             // └─────┴─────┴─────┼─────┼─────┼─────┼──────┤    ├───────┼─────┼─────┼─────┼─────┴─────┴─────┘
             //                   │     │     │     │      │    │       │     │ DEL │     │
             //                   └─────┴─────┴─────┴──────┘    └───────┴─────┴─────┴─────┘
 
             bindings = <
-                &trans    &trans &trans &trans   &trans   &trans                        &trans   &trans    &trans    &trans    &trans &trans
-                &trans    &kp N1 &kp N2 &kp N3   &kp N4   &kp N5                      &kp N6   &kp N7    &kp N8    &kp N9    &kp N0 &trans
-                &trans    &trans &trans &trans   &trans   &trans                        &kp LEFT &kp DOWN  &kp UP    &kp RIGHT &trans &trans
-                &trans    &trans &trans &trans   &trans   &trans   &trans    &trans      &kp HOME &kp PG_DN &kp PG_UP &kp END   &trans &trans
-                                       &trans   &trans   &trans   &trans    &trans      &trans   &kp DEL   &trans
+&trans    &trans  &trans  &trans   &trans   &trans                        &trans    &trans    &trans    &trans    &trans  &trans
+&trans    &kp N1  &kp N2  &kp N3   &kp N4   &kp N5                      &kp N6    &kp N7    &kp N8    &kp N9    &kp N0  &trans
+&trans    &kp F1  &kp F2  &kp F3   &kp F4   &kp F5                      &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT &kp F6  &trans
+&trans    &kp F7  &kp F8  &kp F9   &kp F10  &kp F11  &trans    &trans   &kp HOME  &kp PG_DN &kp PG_UP &kp END   &kp F12 &trans
+                           &trans   &trans   &trans   &trans    &trans   &trans    &kp DEL   &trans
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
